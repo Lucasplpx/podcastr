@@ -1,6 +1,7 @@
 import { format, parseISO } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import { GetStaticPaths, GetStaticProps } from 'next';
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Link from 'next/link';
 import { api } from '../../services/api';
@@ -25,6 +26,12 @@ type EpisodeProps = {
 };
 
 const Episodes = ({ episode }: EpisodeProps) => {
+  const router = useRouter();
+
+  if (router.isFallback) {
+    return <p>Carregando ...</p>;
+  }
+
   return (
     <div className={styles.episode}>
       <div className={styles.thumbnailContainer}>
@@ -66,7 +73,13 @@ export default Episodes;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
-    paths: [],
+    paths: [
+      {
+        params: {
+          slug: 'a-importancia-da-contribuicao-em-open-source',
+        },
+      },
+    ],
     fallback: 'blocking',
   };
 };
